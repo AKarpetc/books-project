@@ -30,7 +30,7 @@ namespace book_editor.web.Controllers.api
         {
             if (ModelState.IsValid)
             {
-                var book = _bookService.Update(model);
+                var book = _bookService.Create(model);
                 return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
             }
             return BadRequest(ModelState);
@@ -52,7 +52,7 @@ namespace book_editor.web.Controllers.api
         {
             if (ModelState.IsValid)
             {
-                var book = _bookService.Create(model);
+                var book = _bookService.Update(model);
                 return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
             }
             return BadRequest(ModelState);

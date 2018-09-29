@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using book_editor.data.DB.Models;
+using book_editor.service.Commom;
 using book_editor.service.Mapper;
 using book_editor.service.Utility;
 using book_editor.service.ViewModels;
@@ -12,22 +13,18 @@ using System.Threading.Tasks;
 
 namespace book_editor.service.AuthorsServices
 {
-    public class AuthorsService: IAuthorsService
+    public class AuthorsService : CoomonRestService<Author, AuthorViewModel>, IAuthorsService
     {
         #region ctor
-        private readonly IMapper _mapper;
-        private readonly IRepository<Author> _authorRepository;
-        public AuthorsService(IRepository<Author> authorRepository, IMapperConfigurator mapperConfigurator)
+        public AuthorsService(IMapperConfigurator mapperConfigurator, IRepository<Author> repository) : base(mapperConfigurator, repository)
         {
-            _mapper = mapperConfigurator.GetMapper();
-            _authorRepository = authorRepository;
+
         }
         #endregion
 
         public IEnumerable<AuthorViewModel> Get(int bookId)
         {
-            return _authorRepository.GetCollection().Where(x=>x.BookId== bookId).ProjectTo<AuthorViewModel>(_mapper.ConfigurationProvider);
+            return _repository.GetCollection().Where(x => x.BookId == bookId).ProjectTo<AuthorViewModel>(_mapper.ConfigurationProvider);
         }
-        
     }
 }

@@ -7,23 +7,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using DataAnnotationsExtensions;
+using book_editor.service.Utility;
 
 namespace book_rditor.service.ViewModels
 {
-    public class BookViewModel: BaseViewModel
+    public class BookViewModel : BaseViewModel
     {
-        
+        [Required]
+        [StringLength(30)]
         public string Header { get; set; }
 
+        [Range(1, 10000, ErrorMessage = "Старниц должно быть от 1 до 10000")]
         public int PageCount { get; set; }
 
+        [StringLength(30)]
         public string PublishingOffice { get; set; }
 
+        [Min(1800)]
         public int PublishYear { get; set; }
 
+        [InputMaskAttribute("000-0-00-000000-0", ErrorMessage = "{0} значение не совпадаетс с форматом {1}.")]
         public string ISBN { get; set; }
 
         public IEnumerable<string> AuctorsShort { get; set; }
+
         public IEnumerable<Author> Auctors { get; set; }
 
     }
@@ -32,11 +41,11 @@ namespace book_rditor.service.ViewModels
         public BookViewModelProfile()
         {
             CreateMap<Book, BookViewModel>()
-                .ForMember(des => des.AuctorsShort, sour => sour.MapFrom(prop => prop.Authors.Select(x => x.Name + " " + x.Surname)));
+                .ForMember(des => des.AuctorsShort, sour => sour.MapFrom(prop => prop.Authors.Where(x => x.IsDelete == false).Select(x => x.Name + " " + x.Surname)));
 
             CreateMap<BookViewModel, Book>()
                  .ForMember(des => des.AuditDateTime, sour => sour.Ignore());
- 
+
         }
     }
 }
