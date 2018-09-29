@@ -19,9 +19,7 @@ namespace book_rditor.service.BookServices
     {
         #region ctor
         public BookService(IRepository<Book> bookRepository, IMapperConfigurator mapperConfigurator) : base(mapperConfigurator, bookRepository)
-        {
-
-        }
+        {}
         #endregion
 
         public List<BookViewModel> Get()
@@ -45,22 +43,7 @@ namespace book_rditor.service.BookServices
         }
         public DataSourceResult Get(DataSourceRequest request)
         {
-            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).ToDataSourceResult(request);
+            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).OrderBy(x=>x.AuditDateTime).ToDataSourceResult(request);
         }
-        //public void Delete(BookViewModel model)
-        //{
-        //    var book = _mapper.Map<Book>(model);
-        //    _repository.Delete(model.Id);
-        //    _repository.Save();
-
-        //}
-        //public BookViewModel Update(BookViewModel model)
-        //{
-        //    var book = _mapper.Map<Book>(model);
-        //    _bookRepository.Update(book);
-        //    _bookRepository.Save();
-        //    model = _mapper.Map<BookViewModel>(book);
-        //    return model;
-        //}
     }
 }

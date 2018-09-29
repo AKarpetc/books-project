@@ -89,14 +89,16 @@
                     {
                         type: "string", validation: { required: true }
                     }
-                }
+                },
+           
             },
-            serverPaging: true,
-            serverFiltering: true,
-            serverSorting: true,
+
             data: "Data",
             total: "Total"
         },
+        serverPaging: true,
+        serverFiltering: true,
+        serverSorting: true,
         sort: getLocalStorage(localStorageIndex)
     });
 
@@ -120,8 +122,9 @@
         },
         columns: [
             {
-                template: '<a href="\\#"><img style="width:70px;height:100px" src="/Files/emptyCover.jpg" /></a>',
-                width: 100
+                template: kendo.template($("#book-editor-cover").html()),
+                width: 100,
+                title: "Обложка",
             },
             {
                 field: "Header",
@@ -134,6 +137,7 @@
             {
                 field: "AuctorsShort",
                 title: "Авторы",
+                sortable: false,
                 template: function (e) {
                     if (e.AuctorsShort == null || e.AuctorsShort.length == 0) {
                         return "";

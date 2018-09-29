@@ -18,10 +18,16 @@
 </div>
 
 <div id="gridBooks"></div>
-
+<div id="fileWindow" style="display:none;">
+    <input type="file" id="cover" name="cover" />
+    <div style="width:100%;text-align:center">
+        <img id="bigCover" src="~/Files/emptyCover.jpg"/>
+    </div>
+</div>
 @section Scripts
     {
     <script type="text/x-kendo-template" id="book-editor-cover">
+        <a href="\\#"><img style="width:70px;height:100px" src="/Files/emptyCover.jpg" /></a>
     </script>
     <script type="text/x-kendo-template" id="book-editor-form">
         <div>
@@ -70,11 +76,14 @@
     <script>
         var bookUrl = "@Url.Action("Books", "api")"
         var authorUrl="@Url.Action("Authors", "api")"
-
+        var saveCoverUrl = "@Url.Action("SaveCover", "Cover")"
+        var removeCoverUrl = "@Url.Action("RemoveCover", "Cover")"
+        
     </script>
+    <script src="~/Scripts/App/fileUploadWindow.js"></script>
     <script src="~/Scripts/App/bookEditorHelp.js"></script>
     <script src="~/Scripts/App/authorTable.js"></script>
     <script src="~/Scripts/App/main.js"></script>
 
 }
-</div>
+
