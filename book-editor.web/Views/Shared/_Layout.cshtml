@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.3.911/styles/kendo.metro.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.3.911/styles/kendo.metro.mobile.min.css" />
+    <link href="~/Scripts/plugins/KendoGridColumnsSelectorPlagin.css" rel="stylesheet" />
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Редактор книг", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:10px" class="container container-fluid">
+
+        @RenderBody()
+
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year – приложение ASP.NET</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="https://kendo.cdn.telerik.com/2018.3.911/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.3.911/js/messages/kendo.messages.ru-RU.min.js?_=1538129822254"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.3.911/js/kendo.timezones.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.3.911/js/cultures/kendo.culture.ru-RU.min.js?_=1538129822254"></script>
+    
+    <script src="~/Scripts/plugins/KendoGridColumnsSelectorPlagin.js"></script>
+    <script src="~/Scripts/plugins/SaveKendoPagerExtention.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+﻿<style>
+    .k-edit-form-container {
+        width: 520px !important;
+    }
+    #card > .k-input 
+    {
+        width:100%!important;
+    }
+</style>
+
+<div class="well well-sm">
+    <label>Созданы с:</label><input id="dateFrom" class="data-picker" />
+    <label>по:</label><input id="dateTo" class="data-picker" />
+</div>
+
+<div id="booksGrid"></div>
+
+
+@section Scripts
+    {
+
+    <script type="text/x-kendo-template" id="book-editor-form">
+        <div>
+            <div class="k-edit-form-container" id="card">
+                <div class="k-edit-label">
+                    <label for="Header">Заголовок</label>
+                </div>
+                <div data-container-for="Header" class="k-edit-field">
+                    <textarea type="text"  style="width:100%;max-width:330px"  class="k-input k-textbox" name="Header" id="Header" required="required" validationmessage="Поле обязательное для заполнения" data-bind="value:Header"></textarea>
+                </div>
+                <div class="k-edit-label">
+                    <label for="Header">Авторы</label>
+                </div>
+
+                <div data-container-for="authorsGridMsg" class="k-edit-field">
+                    <div id="authorsGrid"></div>
+                    <input  class="k-input k-textbox" data-bind="value:AuctorsShort" style="display:none"  name="authorsGridMsg"  id="authorsGridMsg" />
+                </div>
+                <div data-container-for="PageCount" class="k-edit-field">
+                    <input type="text" style="width:100%" class="k-input" name="PageCount" id="PageCount" data-role="numerictextbox" data-bind="value:PageCount" required data-min="1" data-max="10000" validationmessage="Введите значение от 0 до 10000" />
+                </div>
+                <div class="k-edit-label">
+                    <label for="PublishingOffice">Издательство</label>
+                </div>
+                <div data-container-for="PublishingOffice" class="k-edit-field">
+                    <textarea type="text" style="width:100%;max-width:330px" class="k-input k-textbox" name="PublishingOffice" validationmessage="Поле обязательное для заполнения" data-bind="value:PublishingOffice"></textarea>
+                </div>
+                <div class="k-edit-label">
+                    <label for="PublishYear">Год</label>
+                </div>
+                <div data-container-for="PublishYear" class="k-edit-field">
+                    <input data-role="numerictextbox" style="width:100%" class="k-input" data-format="n0" data-bind="value:PublishYear" data-min="1800" data-max="#:new Date().getFullYear()#" />
+                </div>
+                <div class="k-edit-label">
+                    <label for="ISBN">ISBN</label>
+                </div>
+                <div data-container-for="ISBN" class="k-edit-field">
+                    <input type="text" style="width:100%;max-width:330px" data-role='maskedtextbox' class="k-input maskedtextbox" id="isbn" name="ISBN" data-mask="\\978-0-00-000000-0" data-bind="value:ISBN" data-validmask-msg="Не коректный ISNB " required="required" />
+                    <span data-for='isbn' class='k-invalid-msg'></span>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script>
+        var bookUrl = "@Url.Action("Books", "api")"
+        var authorUrl="@Url.Action("Authors", "api")"
+
+    </script>
+    <script>
+
+        function GetAuthorDS(Id)
+        {
+
+            var dataSource
+            if (Id == 0)
+            {
+                dataSource = new kendo.data.DataSource({
+                    data: [],
+                    schema: {
+                        model: {
+                            id: "Id",
+                            fields: {
+                                Name: { type: "text", validation: { required: true } },
+                                Surname: { type: "text", validation: { required: true } },
+                            }
+                        }
+                    },
+                });
+            } else
+            {
+                dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: authorUrl + "/" + Id,
+                            contentType: "application/json",
+                            type: "GET"
+                        },
+                    }
+                });
+            }
+
+
+            return dataSource;
+        }
+        function aurhorsGrid()
+        {
+
+       
+            var authorsGrid = $("#authorsGrid").kendoGrid(
+                {
+                    dataSource: GetAuthorDS(0),
+                    toolbar: ["create", "destroy"],
+                    editable: true,
+                    selectable: true,
+                    change: function ()
+                    {
+                        $("#authorsGridMsg").trigger("change");
+                    },
+                    columns: [
+                        { field: "Name", title: "Имя"},
+                        { field: "Surname", title: "Фамилия" },
+
+                    ]
+                }).data("kendoGrid");
+            $("#authorsGrid .k-grid-delete").click(function ()
+            {
+                authorsGrid.removeRow(authorsGrid.select());
+              
+            });
+            this.grid = authorsGrid;
+            this.dataSource = authorsGrid.dataSource;
+        }
+
+        function addMonths(dt, n) {
+            return new Date(dt.setMonth(dt.getMonth() + n));
+        }
+
+        $(document).ready(function ()
+        {
+            var dataSource, gridBooks, dateFrom, dateTo,authorGrid;
+
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: bookUrl,
+                        contentType: "application/json",
+                        type: "POST"
+                    },
+                    update: {
+                        url: bookUrl,
+                        contentType: "application/json",
+                        type: "POST"
+                    },
+                    destroy:
+                    {
+                        url: bookUrl,
+                        contentType: "application/json",
+                        type: "DELETE"
+                    },
+                    create: {
+                        url: bookUrl,
+                        dataType: "json",
+                        type: "PUT",
+
+                    },
+
+                    parameterMap: function (options, operation) {
+                        if (operation == "read") {
+                            return kendo.stringify(options);
+                        } else {
+                            return options;
+                        }
+                    }
+                },
+                pageSize: 20,
+                schema: {
+                    model: {
+                        id: "Id",
+                        fields: {
+                            Header: {
+                                type: "string", validation:
+                                {
+                                    required: true,
+                                    maxlength: function (input) {
+                                        if ((input.is("[name='Header']") || input.is("[name='PublishingOffice']")) && input.val().length > 30) {
+                                            input.attr("data-maxlength-msg", "Максимальная длина 30");
+                                            return false;
+                                        };
+                                        if (input.is("[data-validmask-msg]") && input.val() != "") {
+                                            var maskedtextbox = input.data("kendoMaskedTextBox");
+                                            if (maskedtextbox.value().indexOf(maskedtextbox.options.promptChar) != -1) {
+                                                input.attr("data-maxlength-msg", "Не коректный ISBN");
+                                                return false;
+                                            }
+                                        }
+                                        console.log(input);
+                                        if (input.is("[name='authorsGridMsg']") && authorGrid.dataSource.view().length == 0)
+                                        {
+                                            $("#authorsGridMsg").attr("data-maxlength-msg", "Книга должна содержать хотя бы одного автора");
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+                                }
+                            },
+                            ISBN: { type: "string" },
+                            AuctorsShort: { type: "string" },
+                            AuditDateTime: { type: "date" },
+                            PageCount: { type: "number", validation: { required: true } },
+                            PublishingOffice:
+                            {
+                                type: "string", validation: { required: true }
+                            }
+                        }
+                    },
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true,
+                    data: "Data",
+                    total: "Total"
+                }
+            });
+
+            gridBooks = $("#booksGrid").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                height: '85vh',
+                filterable: { mode: "row" },
+                sortable: true,
+                sort: function (e)
+                {
+                    console.log(e.sort);
+                },
+                pageable: true,
+                selectable: true,
+                toolbar: ["create", "edit", "destroy"],
+                save: function (e)
+                {
+                    if (e.model.Id == 0)
+                    {
+                        e.model["Auctors"] = $.map(authorGrid.dataSource.view(), function (authorItem)
+                        {
+                            return { Name: authorItem.Name, Surname:authorItem.Surname }
+                        })
+                        console.log(e.model);
+                    }
+                },
+                columns: [
+                    {
+                        field: "Header",
+                        title: "Заголовок",
+                        filterable: {
+
+                            cell: { operator: "contains" }
+                        }
+                    },
+                    {
+                        field: "AuctorsShort",
+                        title: "Авторы",
+                        template: function (e)
+                        {
+                            if (e.AuctorsShort == null || e.AuctorsShort.length == 0) {
+                                return "";
+
+                            } else
+                            {
+                                return e.AuctorsShort;
+                            }
+                        },
+                        filterable: {
+
+                            cell: { operator: "contains" }
+                        }
+                    },
+                    {
+                        field: "AuditDateTime",
+                        title: "Создана",
+                        template: "#:kendo.toString(AuditDateTime,'dd.MM.yy')#"
+                    },
+                    {
+                        field: "PageCount",
+                        title: "Количество страниц"
+                    },
+                    {
+                        field: "PublishingOffice",
+                        title: "Издательство",
+                        filterable: {
+
+                            cell: { operator: "contains" }
+                        }
+                    },
+                    {
+                        field: "PublishYear",
+                        title: "Год"
+                    },
+                    {
+                        title: "ISBN",
+                        field: "ISBN",
+                        filterable: {
+
+                            cell: { operator: "contains" }
+                        }
+                    }
+                ],
+                editable:
+                {
+                    mode: "popup",
+                    template: kendo.template($("#book-editor-form").html()),
+                    window:
+                    {
+
+                        title: "Книга",
+                        width: 550,
+                        open: function ()
+                        {
+                            authorGrid =new aurhorsGrid();
+                            console.log(authorGrid);
+                        }
+                    }
+                }
+            }).data("kendoGrid");
+            gridBooks.PagerExtention();
+            gridBooks.addColumnsSelector();
+
+
+            dateFrom = $("#dateFrom").kendoDatePicker(
+                {
+                    culture: "ru-RU",
+                    value: addMonths(new Date(), -1)
+
+                }
+            );
+            dateTo = $("#dateTo").kendoDatePicker(
+                {
+                    culture: "ru-RU",
+                    value: new Date(),
+                }
+            );
+
+        });
+
+
+    </script>
+}
+</div>
