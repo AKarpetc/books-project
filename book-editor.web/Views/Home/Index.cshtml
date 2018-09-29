@@ -13,7 +13,7 @@
     <label>по:</label><input id="dateTo" class="data-picker" />
 </div>
 
-<div id="booksGrid"></div>
+<div id="gridBooks"></div>
 
 
 @section Scripts
@@ -68,6 +68,16 @@
     </script>
     <script>
 
+        function setLocalStorage(key,value)
+        {
+            var sortJson = JSON.stringify(value);
+            localStorage.setItem(key, sortJson)
+        }
+        function getLocalStorage(key)
+        {
+            console.log(localStorage.getItem(key));
+            return JSON.parse(localStorage.getItem(key))
+        }
         function GetAuthorDS(Id)
         {
 
@@ -102,13 +112,13 @@
 
             return dataSource;
         }
-        function aurhorsGrid()
+        function aurhorsGrid(Id)
         {
 
        
             var authorsGrid = $("#authorsGrid").kendoGrid(
                 {
-                    dataSource: GetAuthorDS(0),
+                    dataSource: GetAuthorDS(Id),
                     toolbar: ["create", "destroy"],
                     editable: true,
                     selectable: true,
@@ -138,23 +148,39 @@
         $(document).ready(function ()
         {
             var dataSource, gridBooks, dateFrom, dateTo,authorGrid;
+            var href = location.href.replace("#", "");
+            var localStorageIndex = href + '_gridBooks_grid-sorts-parameter';
 
+            dateFrom = $("#dateFrom").kendoDatePicker(
+                {
+                    culture: "ru-RU",
+                    value: addMonths(new Date(), -1)
+
+                }
+            );
+            dateTo = $("#dateTo").kendoDatePicker(
+                {
+                    culture: "ru-RU",
+                    value: new Date(),
+                }
+            );
+           
             dataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
-                        url: bookUrl,
+                        url: bookUrl +"/kendods",
                         contentType: "application/json",
                         type: "POST"
                     },
                     update: {
                         url: bookUrl,
-                        contentType: "application/json",
+                        dataType: "json",
                         type: "POST"
                     },
                     destroy:
                     {
                         url: bookUrl,
-                        contentType: "application/json",
+                        dataType: "json",
                         type: "DELETE"
                     },
                     create: {
@@ -164,10 +190,14 @@
 
                     },
 
-                    parameterMap: function (options, operation) {
-                        if (operation == "read") {
+                    parameterMap: function (options, operation)
+                    {
+                        if (operation == "read")
+                        {
                             return kendo.stringify(options);
-                        } else {
+                        } else
+                        {
+                            options.AuditDateTime = null;
                             return options;
                         }
                     }
@@ -218,10 +248,11 @@
                     serverSorting: true,
                     data: "Data",
                     total: "Total"
-                }
+                },
+                sort: getLocalStorage(localStorageIndex)
             });
 
-            gridBooks = $("#booksGrid").kendoGrid({
+            gridBooks = $("#gridBooks").kendoGrid({
                 dataSource: dataSource,
                 pageable: true,
                 height: '85vh',
@@ -229,7 +260,7 @@
                 sortable: true,
                 sort: function (e)
                 {
-                    console.log(e.sort);
+                    setLocalStorage(localStorageIndex, e.sort);
                 },
                 pageable: true,
                 selectable: true,
@@ -242,7 +273,6 @@
                         {
                             return { Name: authorItem.Name, Surname:authorItem.Surname }
                         })
-                        console.log(e.model);
                     }
                 },
                 columns: [
@@ -273,34 +303,40 @@
                         }
                     },
                     {
-                        field: "AuditDateTime",
-                        title: "Создана",
-                        template: "#:kendo.toString(AuditDateTime,'dd.MM.yy')#"
-                    },
-                    {
-                        field: "PageCount",
-                        title: "Количество страниц"
-                    },
-                    {
-                        field: "PublishingOffice",
-                        title: "Издательство",
-                        filterable: {
-
-                            cell: { operator: "contains" }
-                        }
-                    },
-                    {
                         field: "PublishYear",
                         title: "Год"
                     },
                     {
-                        title: "ISBN",
-                        field: "ISBN",
+                        field: "PageCount",
+                        title: "Количество страниц",
+                        sortable:false
+                    },
+                    {
+                        field: "PublishingOffice",
+                        title: "Издательство",
+                        sortable: false,
                         filterable: {
 
                             cell: { operator: "contains" }
                         }
-                    }
+                    },
+
+                    {
+                        title: "ISBN",
+                        field: "ISBN",
+                        sortable: false,
+                        filterable: {
+
+                            cell: { operator: "contains" }
+                        }
+                    },
+                    {
+                        sortable: false,
+                        filterable:false,
+                        field: "AuditDateTime",
+                        title: "Создана",
+                        template: "#:kendo.toString(AuditDateTime,'dd.MM.yy')#"
+                    },
                 ],
                 editable:
                 {
@@ -313,29 +349,26 @@
                         width: 550,
                         open: function ()
                         {
-                            authorGrid =new aurhorsGrid();
+                            var item = gridBooks.dataItem(gridBooks.select());
+                            console.log(item);
+                            authorGrid = new aurhorsGrid(item == null ? 0 : item.Id);
                             console.log(authorGrid);
                         }
                     }
                 }
             }).data("kendoGrid");
-            gridBooks.PagerExtention();
-            gridBooks.addColumnsSelector();
+            gridBooks= gridBooks.PagerExtention();
+            gridBooks= gridBooks.addColumnsSelector();
 
+            $("#gridBooks .k-grid-edit").click(function () {
+                gridBooks.editRow(gridBooks.select());
 
-            dateFrom = $("#dateFrom").kendoDatePicker(
-                {
-                    culture: "ru-RU",
-                    value: addMonths(new Date(), -1)
+            });
+            $("#gridBooks .k-grid-delete").click(function () {
+                gridBooks.removeRow(gridBooks.select());
 
-                }
-            );
-            dateTo = $("#dateTo").kendoDatePicker(
-                {
-                    culture: "ru-RU",
-                    value: new Date(),
-                }
-            );
+            });
+
 
         });
 

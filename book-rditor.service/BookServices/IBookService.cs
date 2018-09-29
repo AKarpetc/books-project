@@ -13,5 +13,9 @@ namespace book_rditor.service.BookServices
     {
         DataSourceResult Get(DataSourceRequest request);
         List<BookViewModel> Get();
+        BookViewModel Create(BookViewModel model);
+        BookViewModel Update(BookViewModel model);
+        void Delete(BookViewModel model);
+
     }
 }

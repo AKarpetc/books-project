@@ -34,7 +34,8 @@ namespace book_rditor.service.ViewModels
             CreateMap<Book, BookViewModel>()
                 .ForMember(des => des.AuctorsShort, sour => sour.MapFrom(prop => prop.Authors.Select(x => x.Name + " " + x.Surname)));
 
-            CreateMap<BookViewModel, Book>();
+            CreateMap<BookViewModel, Book>()
+                 .ForMember(des => des.AuditDateTime, sour => sour.Ignore());
  
         }
     }

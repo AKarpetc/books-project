@@ -19,25 +19,44 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpPost]
+        [Route("api/Books/kendods")]
         public IHttpActionResult GetBooks(DataSourceRequest request)
         {
-             return Ok(_bookService.Get(request));
+            return Ok(_bookService.Get(request));
         }
 
-        [HttpGet]
-        public IHttpActionResult Get()
+        [HttpPost]
+        public IHttpActionResult Post(BookViewModel model)
         {
-            return Ok(_bookService.Get());
+            if (ModelState.IsValid)
+            {
+                var book = _bookService.Update(model);
+                return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+            }
+            return BadRequest(ModelState);
         }
-        //[HttpPost]
-        //public IHttpActionResult Post(DataSourceRequest request)
-        //{
-        //    return Ok(_bookService.Get(request));
-        //}
+
+        [HttpDelete]
+        public IHttpActionResult Delete(BookViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _bookService.Delete(model);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpPut]
-        public IHttpActionResult Put(BookViewModel request)
+        public IHttpActionResult Put(BookViewModel model)
         {
-             return Ok();
+            if (ModelState.IsValid)
+            {
+                var book = _bookService.Create(model);
+                return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+            }
+            return BadRequest(ModelState);
         }
+
     }
 }

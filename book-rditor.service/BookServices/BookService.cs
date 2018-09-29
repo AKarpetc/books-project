@@ -11,35 +11,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using book_editor.service.Commom;
 
 namespace book_rditor.service.BookServices
 {
-    public class BookService : IBookService
+    public class BookService : CoomonRestService<Book, BookViewModel>, IBookService
     {
         #region ctor
-        private readonly IMapper _mapper;
-        private readonly IRepository<Book> _bookRepository;
-        public BookService(IRepository<Book> bookRepository, IMapperConfigurator mapperConfigurator)
+        public BookService(IRepository<Book> bookRepository, IMapperConfigurator mapperConfigurator) : base(mapperConfigurator, bookRepository)
         {
-            _mapper = mapperConfigurator.GetMapper();
-            _bookRepository = bookRepository;
+
         }
         #endregion
 
         public List<BookViewModel> Get()
         {
-           return _bookRepository.GetCollection().ProjectTo<BookViewModel>(_mapper.ConfigurationProvider).ToList();
+            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).ToList();
         }
-        public BookViewModel Create(BookViewModel model)
+        public override BookViewModel Create(BookViewModel model)
         {
-            var book = Mapper.Map<BookViewModel, Book>(model);
-            _bookRepository.Create(book);
-            _bookRepository.Save();
+            var book = _mapper.Map<Book>(model);
+            if (model.Auctors.Count() > 0)
+            {
+                foreach (var author in model.Auctors)
+                {
+                    book.Authors.Add(author);
+                }
+            };
+            _repository.Create(book);
+            _repository.Save();
+            model = _mapper.Map<BookViewModel>(book);
             return model;
         }
         public DataSourceResult Get(DataSourceRequest request)
         {
-            return _bookRepository.GetCollection().ProjectTo<BookViewModel>(_mapper.ConfigurationProvider).ToDataSourceResult(request);
+            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).ToDataSourceResult(request);
         }
+        //public void Delete(BookViewModel model)
+        //{
+        //    var book = _mapper.Map<Book>(model);
+        //    _repository.Delete(model.Id);
+        //    _repository.Save();
+
+        //}
+        //public BookViewModel Update(BookViewModel model)
+        //{
+        //    var book = _mapper.Map<Book>(model);
+        //    _bookRepository.Update(book);
+        //    _bookRepository.Save();
+        //    model = _mapper.Map<BookViewModel>(book);
+        //    return model;
+        //}
     }
 }

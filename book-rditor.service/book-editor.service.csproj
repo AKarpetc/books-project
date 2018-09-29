@@ -66,6 +66,7 @@
     <Compile Include="AuthorsServices\IAuthorsService.cs" />
     <Compile Include="BookServices\BookService.cs" />
     <Compile Include="BookServices\IBookService.cs" />
+    <Compile Include="Commom\CoomonRestService.cs" />
     <Compile Include="Mapper\IMapperConfigurator.cs" />
     <Compile Include="Mapper\MapperConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -26,7 +26,7 @@ namespace book_editor.service.AuthorsServices
 
         public IEnumerable<AuthorViewModel> Get(int bookId)
         {
-            return _authorRepository.GetCollection()/*.Where(x=>x.BookId== bookId)*/.ProjectTo<AuthorViewModel>(_mapper.ConfigurationProvider);
+            return _authorRepository.GetCollection().Where(x=>x.BookId== bookId).ProjectTo<AuthorViewModel>(_mapper.ConfigurationProvider);
         }
         
     }

@@ -8,8 +8,8 @@ namespace book_editor.service.ViewModels.Base
 {
     public class BaseViewModel
     {
-        public string Id { get; set; }
-
+        public int Id { get; set; }
+        
         public DateTime? AuditDateTime { get; set; }
     }
 }
