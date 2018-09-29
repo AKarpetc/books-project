@@ -1,5 +1,4 @@
-﻿$(document).ready(function ()
-{
+﻿$(document).ready(function () {
     var dataSource, gridBooks, dateFrom, dateTo, authorGrid;
     var href = location.href.replace("#", "");
     var localStorageIndex = href + '_gridBooks_grid-sorts-parameter';
@@ -28,7 +27,7 @@
             update: {
                 url: bookUrl,
                 dataType: "json",
-                type:  "PUT"
+                type: "PUT"
             },
             destroy:
             {
@@ -39,7 +38,7 @@
             create: {
                 url: bookUrl,
                 dataType: "json",
-                type: "POST" ,
+                type: "POST",
 
             },
 
@@ -57,7 +56,7 @@
             model: {
                 id: "Id",
                 fields: {
-                    Id: { type: "number"},
+                    Id: { type: "number" },
                     Header: {
                         type: "string", validation:
                         {
@@ -112,16 +111,18 @@
         pageable: true,
         selectable: true,
         toolbar: ["create", "edit", "destroy"],
-        save: function (e)
-        {
-            if (e.model.Id==0)
-            {
+        save: function (e) {
+            if (e.model.Id == 0) {
                 e.model["Auctors"] = $.map(authorGrid.dataSource.view(), function (authorItem) {
                     return { Name: authorItem.Name, Surname: authorItem.Surname }
                 })
             }
         },
         columns: [
+            {
+                template: '<a href="\\#"><img style="width:70px;height:100px" src="/Files/emptyCover.jpg" /></a>',
+                width: 100
+            },
             {
                 field: "Header",
                 title: "Заголовок",

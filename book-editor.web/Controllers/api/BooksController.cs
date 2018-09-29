@@ -28,34 +28,37 @@ namespace book_editor.web.Controllers.api
         [HttpPost]
         public IHttpActionResult Post(BookViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var book = _bookService.Create(model);
-                return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+                return BadRequest(ModelState);
             }
-            return BadRequest(ModelState);
+            var book = _bookService.Create(model);
+            return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+
         }
 
         [HttpDelete]
         public IHttpActionResult Delete(BookViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _bookService.Delete(model);
-                return Ok();
+                return BadRequest(ModelState);
             }
-            return BadRequest(ModelState);
+            _bookService.Delete(model);
+            return Ok();
+
         }
 
         [HttpPut]
         public IHttpActionResult Put(BookViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var book = _bookService.Update(model);
-                return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+                return BadRequest(ModelState);
             }
-            return BadRequest(ModelState);
+            var book = _bookService.Update(model);
+            return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
+
         }
 
     }
