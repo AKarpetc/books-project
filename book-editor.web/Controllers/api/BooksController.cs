@@ -14,13 +14,17 @@ namespace book_editor.web.Controllers.api
 {
     public class BooksController : ApiController
     {
+        #region ctor
+
         public readonly IBookService _bookService;
         IAuthorsService _authorsService;
-        public BooksController(IBookService bookService,IAuthorsService authorsService)
+        public BooksController(IBookService bookService, IAuthorsService authorsService)
         {
             _bookService = bookService;
             _authorsService = authorsService;
         }
+
+        #endregion
 
         private void AuthorsValidate(IEnumerable<AuthorViewModel> authors)
         {

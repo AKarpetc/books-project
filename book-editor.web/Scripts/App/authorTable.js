@@ -55,7 +55,7 @@ function GetAuthorDS(Id) {
 
     return dataSource;
 }
-function aurhorsGrid(Id) {
+function aurhorsGrid(Id,item) {
 
     var columns =
         [
@@ -101,23 +101,29 @@ function aurhorsGrid(Id) {
         });
 
     }
-    console.log($("#authorsGrid").data("kendoGrid"));
-    if ($("#authorsGrid").data("kendoGrid") != undefined)
+    function ChangeMainGrid()
     {
-        alert();
-        $("#authorsGrid").data("kendoGrid").destroy()
-    }
+        $("#authorsGridMsg").trigger("change");
+        if (item != null) {
+            item.dirty = true;
 
+        }
+    }
     var authorsGrid = $("#authorsGrid").kendoGrid(
         {
             dataSource: GetAuthorDS(Id),
             toolbar: toolbar,
             editable: (Id == 0 ? true : "inline"),
             selectable: true,
-            change: function (e) {
-                $("#authorsGridMsg").trigger("change");
+            save: function (e)
+            {
+                ChangeMainGrid()
 
             },
+            remove: function (e) {
+                ChangeMainGrid()
+            },
+
             columns: columns
         }).data("kendoGrid");
 

@@ -15,6 +15,9 @@ namespace book_editor.service.Commom
         where TModel : BaseTable
         where TView : BaseViewModel
     {
+        #region ctor
+
+  
         protected readonly IRepository<TModel> _repository;
         protected readonly IMapper _mapper;
         protected readonly IConfigurationProvider _configurationProvider;
@@ -24,6 +27,8 @@ namespace book_editor.service.Commom
             _configurationProvider = mapper.ConfigurationProvider;
             _repository = repository;
         }
+        #endregion
+
         public virtual TView Create(TView view)
         {
             var model = _mapper.Map<TModel>(view);

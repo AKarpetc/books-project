@@ -26,6 +26,7 @@ namespace book_rditor.service.BookServices
         {
             return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).ToList();
         }
+
         public override BookViewModel Create(BookViewModel model)
         {
             var book = _mapper.Map<Book>(model);
@@ -42,9 +43,26 @@ namespace book_rditor.service.BookServices
             model = _mapper.Map<BookViewModel>(book);
             return model;
         }
+
         public DataSourceResult Get(DataSourceRequest request)
         {
-            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).OrderBy(x => x.AuditDateTime).ToDataSourceResult(request);
+
+            var bookCollection = _repository.GetCollection();
+
+            #region filter for complicated entity
+            var filter = request?.Filter?.Filters?.FirstOrDefault(x => x.Field == "AuctorsShort")?.Value?.ToString();
+            if (filter != null)
+            {
+                request.Filter.Filters = request.Filter.Filters.Where(x => x.Field != "AuctorsShort");
+                bookCollection = bookCollection.Where(x => x.Authors.Where(a => (a.Name + a.Surname).Contains(filter)).Count() > 0);
+            }
+            if (request?.Filter?.Filters?.Count() == 0)
+            {
+                request.Filter = null;
+            }
+            #endregion
+
+            return bookCollection.ProjectTo<BookViewModel>(_configurationProvider).OrderBy(x => x.AuditDateTime).ToDataSourceResult(request);
         }
     }
 }

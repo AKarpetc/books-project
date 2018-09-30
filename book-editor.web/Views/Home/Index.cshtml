@@ -1,6 +1,6 @@
 ﻿<style>
     .k-edit-form-container {
-        width: 520px !important;
+        width: 620px !important;
     }
 
     #card > .k-input {
@@ -12,10 +12,6 @@
     }
 </style>
 
-<div class="well well-sm">
-    <label>Созданы с:</label><input id="dateFrom" class="data-picker" />
-    <label>по:</label><input id="dateTo" class="data-picker" />
-</div>
 
 <div id="gridBooks"></div>
 <div id="fileWindow" style="display:none;">
@@ -36,7 +32,7 @@
         var removeCoverUrl = "@Url.Action("RemoveCover", "Cover")";
         var getCoverUrl = "@Url.Action("GetCover", "Cover")";
         var defaultCover = "/Files/emptyCover.jpg";
-
+        var maxWidth = 375;
     </script>
 
    
@@ -47,13 +43,13 @@
     </script>
    
     <script type="text/x-kendo-template" id="book-editor-form">
-        <div>
+          <div>
             <div class="k-edit-form-container" id="card">
                 <div class="k-edit-label">
                     <label for="Header">Заголовок</label>
                 </div>
                 <div data-container-for="Header" class="k-edit-field">
-                    <textarea type="text" style="width:100%;max-width:330px" class="k-input k-textbox" name="Header" id="Header" required="required" validationmessage="Поле обязательное для заполнения" data-bind="value:Header"></textarea>
+                    <textarea type="text" style="width:100%;max-width:#=maxWidth#px" class="k-input k-textbox" name="Header" id="Header" required="required" validationmessage="Поле обязательное для заполнения" data-bind="value:Header"></textarea>
                 </div>
                 <div class="k-edit-label">
                     <label for="Header">Авторы</label>
@@ -72,7 +68,7 @@
                     <label for="PublishingOffice">Издательство</label>
                 </div>
                 <div data-container-for="PublishingOffice" class="k-edit-field">
-                    <textarea type="text" style="width:100%;max-width:330px" class="k-input k-textbox" name="PublishingOffice" validationmessage="Поле обязательное для заполнения" data-bind="value:PublishingOffice"></textarea>
+                    <textarea type="text" style="width:100%;max-width:#=maxWidth#px" class="k-input k-textbox" name="PublishingOffice" validationmessage="Поле обязательное для заполнения" data-bind="value:PublishingOffice"></textarea>
                 </div>
                 <div class="k-edit-label">
                     <label for="PublishYear">Год</label>
@@ -84,7 +80,7 @@
                     <label for="ISBN">ISBN</label>
                 </div>
                 <div data-container-for="ISBN" class="k-edit-field">
-                    <input type="text" style="width:100%;max-width:330px" data-role='maskedtextbox' class="k-input maskedtextbox" id="isbn" name="ISBN" data-mask="\\978-0-00-000000-0" data-bind="value:ISBN" data-validmask-msg="Не коректный ISNB " required="required" />
+                    <input type="text" style="width:100%;max-width:#=maxWidth#px" data-role='maskedtextbox' class="k-input maskedtextbox" id="isbn" name="ISBN" data-mask="\\978-0-00-000000-0" data-bind="value:ISBN" data-validmask-msg="Не коректный ISNB " required="required" />
                     <span data-for='isbn' class='k-invalid-msg'></span>
                 </div>
             </div>

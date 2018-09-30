@@ -1,21 +1,7 @@
-﻿$(document).ready(function ()
-{
+﻿$(document).ready(function () {
     var dataSource, gridBooks, dateFrom, dateTo, authorGrid;
     var href = location.href.replace("#", "");
     var localStorageIndex = href + '_gridBooks_grid-sorts-parameter';
-
-    dateFrom = $("#dateFrom").kendoDatePicker(
-        {
-            culture: "ru-RU",
-            value: addMonths(new Date(), -1)
-
-        });
-
-    dateTo = $("#dateTo").kendoDatePicker(
-        {
-            culture: "ru-RU",
-            value: new Date(),
-        });
 
     dataSource = new kendo.data.DataSource({
         transport: {
@@ -51,6 +37,11 @@
                 }
             }
         },
+        error: function (e) {
+            console.log(e);
+            alert(e.xhr.responseText)
+
+        },
         pageSize: 20,
         schema: {
             model: {
@@ -74,6 +65,7 @@
                                     }
                                 }
                                 if (input.is("[name='authorsGridMsg']") && authorGrid.dataSource.view().length == 0) {
+
                                     $("#authorsGridMsg").attr("data-maxlength-msg", "Книга должна содержать хотя бы одного автора");
                                     return false;
                                 }
@@ -84,14 +76,15 @@
                     ISBN: { type: "string" },
                     AuctorsShort: { type: "string" },
                     AuditDateTime: { type: "date" },
-                    IsWithCover: {type:"boolean"},
+                    PublishYear: { type: "number" },
+                    IsWithCover: { type: "boolean" },
                     PageCount: { type: "number", validation: { required: true } },
                     PublishingOffice:
                     {
                         type: "string", validation: { required: true }
                     }
                 },
-           
+
             },
 
             data: "Data",
@@ -115,12 +108,11 @@
         selectable: true,
         toolbar: ["create", "edit", "destroy"],
         save: function (e) {
-           // if (e.model.Id == 0)
-            {
-                e.model["Auctors"] = $.map(authorGrid.dataSource.view(), function (authorItem) {
-                    return { Name: authorItem.Name, Surname: authorItem.Surname }
-                })
-            }
+
+            e.model["Auctors"] = $.map(authorGrid.dataSource.view(), function (authorItem) {
+                return { Name: authorItem.Name, Surname: authorItem.Surname }
+            })
+
         },
         columns: [
             {
@@ -182,6 +174,7 @@
                 }
             },
             {
+                hidden: true,
                 sortable: false,
                 filterable: false,
                 field: "AuditDateTime",
@@ -197,10 +190,10 @@
             {
 
                 title: "Книга",
-                width: 550,
+                width: 650,
                 open: function () {
                     var item = gridBooks.dataItem(gridBooks.select());
-                    authorGrid = new aurhorsGrid(item == null ? 0 : item.Id);
+                    authorGrid = new aurhorsGrid(item == null ? 0 : item.Id, item);
                 }
             }
         }
@@ -219,16 +212,14 @@
 
     });
 
-    function ColBackFileSet(id,ref)
-    {
+    function ColBackFileSet(id, ref) {
         $(".cover-for-book-" + id).attr("src", ref)
         gridBooks.dataSource.get(id).IsWithCover = true;
     }
 
-    $("body").on("click", ".cover-ref", function ()
-    {
+    $("body").on("click", ".cover-ref", function () {
         var bookId = $(this).data("id");
-        var IsWithCover = Boolean($(this).data("is-with-cover")); 
+        var IsWithCover = Boolean($(this).data("is-with-cover"));
         var Item = gridBooks.dataSource.get(bookId)
         openCover(bookId, IsWithCover, ColBackFileSet, Item.Header);
     });

@@ -11,11 +11,16 @@ namespace book_editor.web.Controllers.api
 {
     public class AuthorsController : ApiController
     {
+        #region ctor
+
         IAuthorsService _authorsService;
         public AuthorsController(IAuthorsService authorsService)
         {
             _authorsService = authorsService;
         }
+
+        #endregion
+
 
         [HttpGet]
         public IHttpActionResult Get(int id)

@@ -11,11 +11,16 @@ namespace book_editor.web.Controllers
 {
     public class CoverController : Controller
     {
+        #region ctor
+
+
         private readonly ICoverService _coverServie;
         public CoverController(ICoverService coverServie)
         {
             _coverServie = coverServie;
         }
+
+        #endregion
 
         public ActionResult GetCover(int id)
         {

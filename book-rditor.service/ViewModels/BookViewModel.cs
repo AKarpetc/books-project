@@ -17,15 +17,19 @@ namespace book_rditor.service.ViewModels
     {
         [Required]
         [StringLength(30)]
+        [Display(Name ="Заголовок")]
         public string Header { get; set; }
 
         [Range(1, 10000, ErrorMessage = "Старниц должно быть от 1 до 10000")]
+        [Display(Name = "Количество страниц")]
         public int PageCount { get; set; }
 
         [StringLength(30)]
+        [Display(Name = "Издательство")]
         public string PublishingOffice { get; set; }
 
         [Min(1800)]
+        [Display(Name = "Год публикации")]
         public int PublishYear { get; set; }
 
         [InputMaskAttribute("000-0-00-000000-0", ErrorMessage = "{0} значение не совпадаетс с форматом {1}.")]

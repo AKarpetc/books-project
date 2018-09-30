@@ -14,9 +14,11 @@ namespace book_editor.service.ViewModels
     {
         [Required]
         [StringLength(20)]
+        [Display(Name = "Имя автора")]
         public string Name { get; set; }
         [Required]
         [StringLength(20)]
+        [Display(Name = "Фамилия автора")]
         public string Surname { get; set; }
 
         public int BookId { get; set; }

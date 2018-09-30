@@ -72,7 +72,6 @@ function openCover(bookId, IsWithCover, callback,name)
             }
             else
             {
-                console.log("remove");
                 SetCover(defaultCover);
             }
 
