@@ -14,8 +14,10 @@ namespace book_editor.data.DB.Models.Base
             AuditDateTime = DateTime.Now;
 
         }
+
         [Key]
         public int Id { get; set; }
+
         [DataType(DataType.DateTime)]
         public DateTime AuditDateTime { get; set; }
 

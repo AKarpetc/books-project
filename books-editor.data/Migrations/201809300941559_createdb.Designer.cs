@@ -7,13 +7,13 @@ namespace book_editor.data.DB
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class CreateDB : IMigrationMetadata
+    public sealed partial class createdb : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateDB));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(createdb));
         
         string IMigrationMetadata.Id
         {
-            get { return "201809280625068_CreateDB"; }
+            get { return "201809300941559_createdb"; }
         }
         
         string IMigrationMetadata.Source

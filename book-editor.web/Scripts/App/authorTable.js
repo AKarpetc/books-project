@@ -63,15 +63,15 @@ function aurhorsGrid(Id) {
             { field: "Surname", title: "Фамилия" },
       
         ];
-    if (Id != 0)
-    {
+    var toolbar = ["create"]
+    if (Id != 0) {
         columns.push({
             command: [{
                 name: "edit",
                 text: {
                     edit: "",
                     update: "",
-                    cancel: ""
+                    cancel: "",
                 },
                 iconClass: "k-icon k-i-edit",
             },
@@ -83,14 +83,35 @@ function aurhorsGrid(Id) {
 
 
             ]
-        })
+        });
+ 
 
+    } else
+    {
+        columns.push({
+            command: [
+            {
+                name: "destroy",
+                text: "",
+                iconClass: "k-icon k-i-close"
+            },
+
+
+            ]
+        });
+
+    }
+    console.log($("#authorsGrid").data("kendoGrid"));
+    if ($("#authorsGrid").data("kendoGrid") != undefined)
+    {
+        alert();
+        $("#authorsGrid").data("kendoGrid").destroy()
     }
 
     var authorsGrid = $("#authorsGrid").kendoGrid(
         {
             dataSource: GetAuthorDS(Id),
-            toolbar: ["create", "destroy"],
+            toolbar: toolbar,
             editable: (Id == 0 ? true : "inline"),
             selectable: true,
             change: function (e) {
@@ -100,13 +121,10 @@ function aurhorsGrid(Id) {
             columns: columns
         }).data("kendoGrid");
 
-
-
-    $("#authorsGrid .k-grid-delete").click(function () {
-        authorsGrid.removeRow(authorsGrid.select());
-
-    });
+   
     this.grid = authorsGrid;
     this.dataSource = authorsGrid.dataSource;
+
 }
+
 

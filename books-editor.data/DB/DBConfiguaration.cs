@@ -17,11 +17,10 @@ namespace book_editor.data.DB
         }
         protected override void Seed(BooksContext db)
         {
-            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Книга 1", ISBN = "13216546", PageCount = 300, PublishingOffice = "Москва", PublishYear = 1981, Authors = new List<Author> { new Author { Name = "Автор Имя 1", Surname= "Автор Имя 2 " } } });
-            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Книга 2", ISBN = "13216546", PageCount = 300, PublishingOffice = "Москва", PublishYear = 1981, Authors = new List<Author> { new Author { Name = "Имя 1", Surname = "Фамилия 2 " } } });
-            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Книга 3", ISBN = "13216546", PageCount = 300, PublishingOffice = "Москва", PublishYear = 1981, Authors = new List<Author> { new Author { Name = "Имя 1", Surname = "Фамилия 2 " } } });
-            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Книга 4", ISBN = "13216546", PageCount = 300, PublishingOffice = "Москва", PublishYear = 1981, Authors = new List<Author> { new Author { Name = "Имя 1", Surname = "Фамилия 2 " },new Author { Name = "Имя 5", Surname = "Фамилия 6 " } } });
-            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Книга 5", ISBN = "13216546", PageCount = 300, PublishingOffice = "Москва", PublishYear = 1981, Authors = new List<Author> { new Author { Name = "Имя 1", Surname = "Фамилия 2 " } } });
+            db.Covers.RemoveRange(db.Covers);
+            db.SaveChanges();
+            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "Тайные виды на гору Фудзи", AuditDateTime=DateTime.Now, ISBN = "978-5-04-098435-0", PageCount = 300, PublishingOffice = "Москва", PublishYear = 2010, Authors = new List<Author> { new Author { Name = "Виктор", Surname= "Пелевин" } } });
+            db.Books.AddOrUpdate(x => x.Header, new Models.Book { Header = "CSharp 6.0. Справочник.", ISBN = "978-5-8459-2087-4", PageCount = 300, PublishingOffice = "Вильямс", PublishYear = 2005, Authors = new List<Author> { new Author { Name = "Джозеф", Surname = "Албахари" }, new Author { Name = "Бен", Surname = "Албахари" } }, });
 
             db.SaveChanges();
         }

@@ -72,6 +72,7 @@
     <Compile Include="BookServices\IBookService.cs" />
     <Compile Include="Commom\CoomonRestService.cs" />
     <Compile Include="CoverServices\CoverService.cs" />
+    <Compile Include="CoverServices\ICoverServie.cs" />
     <Compile Include="Mapper\IMapperConfigurator.cs" />
     <Compile Include="Mapper\MapperConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="ViewModels\AuthorViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\BookViewModel.cs" />
+    <Compile Include="ViewModels\CoverViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\books-editor.data\book-editor.data.csproj">

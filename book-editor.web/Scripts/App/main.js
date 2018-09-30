@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(function ()
+{
     var dataSource, gridBooks, dateFrom, dateTo, authorGrid;
     var href = location.href.replace("#", "");
     var localStorageIndex = href + '_gridBooks_grid-sorts-parameter';
@@ -8,14 +9,13 @@
             culture: "ru-RU",
             value: addMonths(new Date(), -1)
 
-        }
-    );
+        });
+
     dateTo = $("#dateTo").kendoDatePicker(
         {
             culture: "ru-RU",
             value: new Date(),
-        }
-    );
+        });
 
     dataSource = new kendo.data.DataSource({
         transport: {
@@ -84,6 +84,7 @@
                     ISBN: { type: "string" },
                     AuctorsShort: { type: "string" },
                     AuditDateTime: { type: "date" },
+                    IsWithCover: {type:"boolean"},
                     PageCount: { type: "number", validation: { required: true } },
                     PublishingOffice:
                     {
@@ -114,7 +115,8 @@
         selectable: true,
         toolbar: ["create", "edit", "destroy"],
         save: function (e) {
-            if (e.model.Id == 0) {
+           // if (e.model.Id == 0)
+            {
                 e.model["Auctors"] = $.map(authorGrid.dataSource.view(), function (authorItem) {
                     return { Name: authorItem.Name, Surname: authorItem.Surname }
                 })
@@ -203,6 +205,7 @@
             }
         }
     }).data("kendoGrid");
+
     gridBooks = gridBooks.PagerExtention();
     gridBooks = gridBooks.addColumnsSelector();
 
@@ -210,9 +213,24 @@
         gridBooks.editRow(gridBooks.select());
 
     });
+
     $("#gridBooks .k-grid-delete").click(function () {
         gridBooks.removeRow(gridBooks.select());
 
+    });
+
+    function ColBackFileSet(id,ref)
+    {
+        $(".cover-for-book-" + id).attr("src", ref)
+        gridBooks.dataSource.get(id).IsWithCover = true;
+    }
+
+    $("body").on("click", ".cover-ref", function ()
+    {
+        var bookId = $(this).data("id");
+        var IsWithCover = Boolean($(this).data("is-with-cover")); 
+        var Item = gridBooks.dataSource.get(bookId)
+        openCover(bookId, IsWithCover, ColBackFileSet, Item.Header);
     });
 
 

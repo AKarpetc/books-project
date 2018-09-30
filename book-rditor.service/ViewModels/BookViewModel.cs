@@ -33,15 +33,17 @@ namespace book_rditor.service.ViewModels
 
         public IEnumerable<string> AuctorsShort { get; set; }
 
-        public IEnumerable<Author> Auctors { get; set; }
+        public IEnumerable<AuthorViewModel> Auctors { get; set; }
 
+        public bool IsWithCover { get; set; }
     }
     public class BookViewModelProfile : Profile
     {
         public BookViewModelProfile()
         {
             CreateMap<Book, BookViewModel>()
-                .ForMember(des => des.AuctorsShort, sour => sour.MapFrom(prop => prop.Authors.Where(x => x.IsDelete == false).Select(x => x.Name + " " + x.Surname)));
+                .ForMember(des => des.AuctorsShort, sour => sour.MapFrom(prop => prop.Authors.Where(x => x.IsDelete == false).Select(x => x.Name + " " + x.Surname)))
+                .ForMember(des=>des.IsWithCover, sour => sour.MapFrom(prop =>prop.Covers.Any()));
 
             CreateMap<BookViewModel, Book>()
                  .ForMember(des => des.AuditDateTime, sour => sour.Ignore());

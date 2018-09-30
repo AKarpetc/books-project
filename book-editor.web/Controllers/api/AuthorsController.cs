@@ -46,15 +46,10 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpDelete]
-        public IHttpActionResult Delete(AuthorViewModel model)
+        public void Delete(AuthorViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _authorsService.Delete(model);
-            return Ok();
+
         }
     }
 }

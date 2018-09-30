@@ -17,6 +17,7 @@ namespace book_editor.service.Utility
         void Create(T item); // создание объекта
         void Update(T item); // обновление объекта
         void Delete(int id); // удаление объекта по id
+        void HardDelete(int id); // удаление объекта по id
         void Save();  // сохранение изменений
         Task SaveAsync();// сохранение изменений асинхронно
         IQueryable<T> GetCollectionWithDeleted();//Получения всех записей 

@@ -13,51 +13,94 @@ var fileWindow = $("#fileWindow").kendoWindow({
     },
 
 }).data("kendoWindow");
-function openCover()
+
+function openCover(bookId, IsWithCover, callback,name)
 {
 
-// var upload = $("#cover").kendoUpload({
-//    async: {
-//        saveUrl: saveCoverUrl,
-//        removeUrl: removeCoverUrl,
-//        autoUpload: true
-//    },
-//    validation: {
-//        allowedExtensions: ["jpeg", "jpg", "png"],
-//    },
-//    multiple: false,
-//    upload: function (e)
-//    {
-       
-//    },
-//    remove: function (e) {
-//    },
-//    success: function (e) {
-       
-//    },
-//    complete: function (e) {
-//    },
-//    // template: function (e)
-//    // {
-//    //    var id = e.files[0].id;
-//    //    var defaultImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"; //super small image
-//    //    var urlDownload = '@Url.Action("GetFile", "CarWeightingClose", new { area= "CarOrders" })?fileId=' + id;
-//    //    var template = '<div class="product"><button class="btn remove-photo-report btn-danger" type="button " data-id="' + id + '">' +
-//    //        '<i class="fa fa-remove"></i></button><a  href="' + urlDownload + '"><img class="image-preview" src="' + (isDef(id) ? urlDownload : defaultImage) + '"></img></a></div>';
-//    //    return template;
-//    //}
-//}).data('kendoUpload');
+    var cover;
+    if (IsWithCover)
+    {
+        cover = [{ name: name, extension: "jpg", size: "0" }];
+    }
 
-    $("#cover").kendoUpload({
+
+       
+
+    function SetCover(srs)
+    {
+        $("#bigCover").attr("src", srs);
+        callback(bookId, srs);
+    }
+    function addPreview(file)
+    {
+        var raw = file.rawFile;
+        var reader = new FileReader();
+
+        if (raw)
+        {
+            reader.onloadend = function ()
+            {
+                SetCover(this.result);
+            };
+            reader.readAsDataURL(raw);
+        }
+    }
+
+    $("#coverContainer").html("");
+    var fileSelect;
+    $('<input type="file" id="cover" name="cover" />').appendTo("#coverContainer").kendoUpload({
         async: {
             saveUrl: saveCoverUrl,
-            removeUrl: removeCoverUrl,
+            removeUrl: removeCoverUrl + "/" + bookId,
             autoUpload: true
         },
+        validation: {
+            allowedExtensions: ["jpeg", "jpg", "png"],
+        },
+        upload: function (e) {
+            e.data = { bookId: bookId };
+
+        },
+        success: function (e)
+        {
+           
+            if (e.operation != "remove")
+            {
+                setTimeout(function () {
+                    addPreview(fileSelect);
+                });
+            }
+            else
+            {
+                console.log("remove");
+                SetCover(defaultCover);
+            }
+
+        },
+        complete: function (e)
+        {
+            
+        },
+        select: function (e)
+        {
+            var fileInfo = e.files[0];
+            fileSelect = fileInfo;
+            
+        },
+        files: cover,
         dropZone: "#fileWindow",
         multiple: false,
     });
+
+    if (IsWithCover)
+    {
+        $("#bigCover").attr("src", getCoverUrl + "/" + bookId)
+    } else
+    {
+        $("#bigCover").attr("src", defaultCover)
+
+    }
+
     fileWindow.center();
     fileWindow.open();
 }
-openCover();

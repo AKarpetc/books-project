@@ -42,9 +42,8 @@ namespace book_editor.service.Utility
             T entity = DbSet.Find(id);
 
             var entry = _dbContext.Entry(entity);
-            entry.State = EntityState.Deleted;
 
-            DbSet.Remove(entity);
+            Delete(entity);
         }
 
         public void Delete(T entity)
@@ -110,6 +109,14 @@ namespace book_editor.service.Utility
         public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             return existDbset.Where(predicate);
+        }
+
+        public void HardDelete(int id)
+        {
+            T entity = DbSet.Find(id);
+            var entry = _dbContext.Entry(entity);
+            entry.State = EntityState.Deleted;
+            DbSet.Remove(entity);
         }
     }
 }

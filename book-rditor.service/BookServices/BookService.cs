@@ -19,7 +19,7 @@ namespace book_rditor.service.BookServices
     {
         #region ctor
         public BookService(IRepository<Book> bookRepository, IMapperConfigurator mapperConfigurator) : base(mapperConfigurator, bookRepository)
-        {}
+        { }
         #endregion
 
         public List<BookViewModel> Get()
@@ -33,7 +33,8 @@ namespace book_rditor.service.BookServices
             {
                 foreach (var author in model.Auctors)
                 {
-                    book.Authors.Add(author);
+                    var authorEntity = _mapper.Map<Author>(author);
+                    book.Authors.Add(authorEntity);
                 }
             };
             _repository.Create(book);
@@ -43,7 +44,7 @@ namespace book_rditor.service.BookServices
         }
         public DataSourceResult Get(DataSourceRequest request)
         {
-            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).OrderBy(x=>x.AuditDateTime).ToDataSourceResult(request);
+            return _repository.GetCollection().ProjectTo<BookViewModel>(_configurationProvider).OrderBy(x => x.AuditDateTime).ToDataSourceResult(request);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using book_rditor.service.BookServices;
+﻿using book_editor.service.AuthorsServices;
+using book_editor.service.ViewModels;
+using book_rditor.service.BookServices;
 using book_rditor.service.ViewModels;
 using Kendo.DynamicLinq;
 using System;
@@ -13,9 +15,19 @@ namespace book_editor.web.Controllers.api
     public class BooksController : ApiController
     {
         public readonly IBookService _bookService;
-        public BooksController(IBookService bookService)
+        IAuthorsService _authorsService;
+        public BooksController(IBookService bookService,IAuthorsService authorsService)
         {
             _bookService = bookService;
+            _authorsService = authorsService;
+        }
+
+        private void AuthorsValidate(IEnumerable<AuthorViewModel> authors)
+        {
+            if (!authors.Any())
+            {
+                ModelState.AddModelError("Authors", "Дожен быть хотя бы один автор");
+            }
         }
 
         [HttpPost]
@@ -32,21 +44,17 @@ namespace book_editor.web.Controllers.api
             {
                 return BadRequest(ModelState);
             }
+            AuthorsValidate(model.Auctors);
             var book = _bookService.Create(model);
             return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
 
         }
 
         [HttpDelete]
-        public IHttpActionResult Delete(BookViewModel model)
+        public void Delete(BookViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             _bookService.Delete(model);
-            return Ok();
-
+           
         }
 
         [HttpPut]
@@ -56,6 +64,7 @@ namespace book_editor.web.Controllers.api
             {
                 return BadRequest(ModelState);
             }
+            AuthorsValidate(_authorsService.Get(model.Id));
             var book = _bookService.Update(model);
             return CreatedAtRoute("DefaultApi", new { book.Id }, new { Data = book, book.Id });
 

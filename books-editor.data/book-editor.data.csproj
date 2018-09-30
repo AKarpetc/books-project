@@ -55,9 +55,9 @@
     <Compile Include="DB\Models\Base\BaseTable.cs" />
     <Compile Include="DB\Models\Book.cs" />
     <Compile Include="DB\Models\Cover.cs" />
-    <Compile Include="Migrations\201809280625068_CreateDB.cs" />
-    <Compile Include="Migrations\201809280625068_CreateDB.Designer.cs">
-      <DependentUpon>201809280625068_CreateDB.cs</DependentUpon>
+    <Compile Include="Migrations\201809300941559_createdb.cs" />
+    <Compile Include="Migrations\201809300941559_createdb.Designer.cs">
+      <DependentUpon>201809300941559_createdb.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,8 +67,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201809280625068_CreateDB.resx">
-      <DependentUpon>201809280625068_CreateDB.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201809300941559_createdb.resx">
+      <DependentUpon>201809300941559_createdb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

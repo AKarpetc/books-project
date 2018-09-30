@@ -18,7 +18,7 @@ namespace book_editor.service.ViewModels
         [Required]
         [StringLength(20)]
         public string Surname { get; set; }
-        [Required]
+
         public int BookId { get; set; }
     }
     public class AuthorViewModelProfile : Profile

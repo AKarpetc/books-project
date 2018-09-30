@@ -19,16 +19,33 @@
 
 <div id="gridBooks"></div>
 <div id="fileWindow" style="display:none;">
-    <input type="file" id="cover" name="cover" />
+    
+    <div id="coverContainer">
+
+    </div>
     <div style="width:100%;text-align:center">
-        <img id="bigCover" src="~/Files/emptyCover.jpg"/>
+        <img style="width:280px;height:400px" id="bigCover" />
     </div>
 </div>
 @section Scripts
     {
-    <script type="text/x-kendo-template" id="book-editor-cover">
-        <a href="\\#"><img style="width:70px;height:100px" src="/Files/emptyCover.jpg" /></a>
+    <script>
+        var bookUrl = "@Url.Action("Books", "api")";
+        var authorUrl = "@Url.Action("Authors", "api")";
+        var saveCoverUrl = "@Url.Action("SaveCover", "Cover")";
+        var removeCoverUrl = "@Url.Action("RemoveCover", "Cover")";
+        var getCoverUrl = "@Url.Action("GetCover", "Cover")";
+        var defaultCover = "/Files/emptyCover.jpg";
+
     </script>
+
+   
+    <script type="text/x-kendo-template" id="book-editor-cover">
+        <a href="\\#" data-id="#:Id#" data-is-with-cover="#:IsWithCover#" class="cover-ref">
+        <img style="width:70px;height:100px" class="cover-for-book-#:Id#" src="#:IsWithCover?getCoverUrl+'/'+Id:'/Files/emptyCover.jpg'#" />
+        </a>
+    </script>
+   
     <script type="text/x-kendo-template" id="book-editor-form">
         <div>
             <div class="k-edit-form-container" id="card">
@@ -73,13 +90,7 @@
             </div>
         </div>
     </script>
-    <script>
-        var bookUrl = "@Url.Action("Books", "api")"
-        var authorUrl="@Url.Action("Authors", "api")"
-        var saveCoverUrl = "@Url.Action("SaveCover", "Cover")"
-        var removeCoverUrl = "@Url.Action("RemoveCover", "Cover")"
-        
-    </script>
+
     <script src="~/Scripts/App/fileUploadWindow.js"></script>
     <script src="~/Scripts/App/bookEditorHelp.js"></script>
     <script src="~/Scripts/App/authorTable.js"></script>
