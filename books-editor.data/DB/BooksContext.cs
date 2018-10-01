@@ -10,7 +10,7 @@ namespace book_editor.data.DB
 {
     public class BooksContext : DbContext, IDBContext
     {
-        public BooksContext() : base("BoocksContext")
+        public BooksContext() : base("BooksContext")
         {
 
         }

@@ -70,7 +70,7 @@
     <Compile Include="AuthorsServices\IAuthorsService.cs" />
     <Compile Include="BookServices\BookService.cs" />
     <Compile Include="BookServices\IBookService.cs" />
-    <Compile Include="Commom\CoomonRestService.cs" />
+    <Compile Include="Common\CommonRestService.cs" />
     <Compile Include="CoverServices\CoverService.cs" />
     <Compile Include="CoverServices\ICoverServie.cs" />
     <Compile Include="Mapper\IMapperConfigurator.cs" />

@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\BoocksContext.cs" />
+    <Compile Include="DB\BooksContext.cs" />
     <Compile Include="DB\DBConfiguaration.cs" />
     <Compile Include="DB\IDBContext.cs" />
     <Compile Include="DB\Models\Author.cs" />

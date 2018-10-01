@@ -15,7 +15,7 @@ using book_editor.service.Commom;
 
 namespace book_rditor.service.BookServices
 {
-    public class BookService : CoomonRestService<Book, BookViewModel>, IBookService
+    public class BookService : CommonRestService<Book, BookViewModel>, IBookService
     {
         #region ctor
         public BookService(IRepository<Book> bookRepository, IMapperConfigurator mapperConfigurator) : base(mapperConfigurator, bookRepository)

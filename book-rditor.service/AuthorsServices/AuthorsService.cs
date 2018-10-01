@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace book_editor.service.AuthorsServices
 {
-    public class AuthorsService : CoomonRestService<Author, AuthorViewModel>, IAuthorsService
+    public class AuthorsService : CommonRestService<Author, AuthorViewModel>, IAuthorsService
     {
         #region ctor
         public AuthorsService(IMapperConfigurator mapperConfigurator, IRepository<Author> repository) : base(mapperConfigurator, repository)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace book_editor.service.Commom
 {
-    public class CoomonRestService<TModel, TView>
+    public class CommonRestService<TModel, TView>
         where TModel : BaseTable
         where TView : BaseViewModel
     {
@@ -21,7 +21,7 @@ namespace book_editor.service.Commom
         protected readonly IRepository<TModel> _repository;
         protected readonly IMapper _mapper;
         protected readonly IConfigurationProvider _configurationProvider;
-        public CoomonRestService(IMapperConfigurator mapper, IRepository<TModel> repository)
+        public CommonRestService(IMapperConfigurator mapper, IRepository<TModel> repository)
         {
             _mapper = mapper.GetMapper();
             _configurationProvider = mapper.ConfigurationProvider;
