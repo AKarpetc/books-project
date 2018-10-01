@@ -42,7 +42,7 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpPost]
-        public IHttpActionResult Post(BookViewModel model)
+        public IHttpActionResult Post([FromBody]BookViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -55,14 +55,14 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpDelete]
-        public void Delete(BookViewModel model)
+        public void Delete([FromBody]BookViewModel model)
         {
             _bookService.Delete(model);
            
         }
 
         [HttpPut]
-        public IHttpActionResult Put(BookViewModel model)
+        public IHttpActionResult Put([FromBody]BookViewModel model)
         {
             if (!ModelState.IsValid)
             {

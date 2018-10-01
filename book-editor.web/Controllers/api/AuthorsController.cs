@@ -29,7 +29,7 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpPost]
-        public IHttpActionResult Post(AuthorViewModel model)
+        public IHttpActionResult Post([FromBody]AuthorViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +40,7 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpPut]
-        public IHttpActionResult Put(AuthorViewModel model)
+        public IHttpActionResult Put([FromBody]AuthorViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +51,7 @@ namespace book_editor.web.Controllers.api
         }
 
         [HttpDelete]
-        public void Delete(AuthorViewModel model)
+        public void Delete([FromBody]AuthorViewModel model)
         {
             _authorsService.Delete(model);
 
